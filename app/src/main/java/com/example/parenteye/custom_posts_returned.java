@@ -12,6 +12,7 @@ public class custom_posts_returned {
     private Bitmap profile_image;
     private Bitmap post_image;
     private Date post_date;
+
    // private  static  final String noimage="-1";
 
 
@@ -20,7 +21,9 @@ public class custom_posts_returned {
 
     }
 
-    public custom_posts_returned(String post_text, Bitmap profile_image, Bitmap post_image, Date post_date,String post_owner_name) {
+
+
+    public custom_posts_returned(String post_text, Bitmap profile_image, Bitmap post_image, Date post_date, String post_owner_name) {
         this.post_text = post_text;
         this.profile_image = profile_image;
         this.post_image = post_image;

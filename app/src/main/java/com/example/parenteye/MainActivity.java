@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
     private Integer userCompleteProfile=0;
     private Button logout;
     private ListView Post_listview;
-    private ArrayList<custom_posts_returned> HomePosts=new ArrayList<custom_posts_returned>();
     private String friendlist;
     private ArrayList<String> friendspostskeys=new ArrayList<String>();
     private ArrayList<Posts> Postss=new ArrayList<Posts>();
@@ -152,17 +151,64 @@ public class MainActivity extends AppCompatActivity {
 
 
 */
-        AllHomePosts();
 
+    /*   ArrayList<custom_posts_returned> HomePosts=new ArrayList<custom_posts_returned>();
+        Post_listview=(ListView)findViewById(R.id.Post_listview);
+         PostAdapter postadapter=new PostAdapter(MainActivity.this,HomePosts);
+        Post_listview.setAdapter(postadapter);
+custom_posts_returned c=new custom_posts_returned();
+c.setPost_owner_name("post1");
+c.setPost_text("post1 text");
+        custom_posts_returned c2=new custom_posts_returned();
+        c2.setPost_owner_name("post1");
+        c2.setPost_text("post1 text");
+        custom_posts_returned c3=new custom_posts_returned();
+        c3.setPost_owner_name("post1");
+        c3.setPost_text("post1 text");
+        custom_posts_returned c1=new custom_posts_returned();
+        c1.setPost_owner_name("post1");
+        c1.setPost_text("post1 text");
+        custom_posts_returned c4=new custom_posts_returned();
+        c4.setPost_owner_name("post1");
+        c4.setPost_text("post1 text");
+        custom_posts_returned c5=new custom_posts_returned();
+        c5.setPost_owner_name("post1");
+        c5.setPost_text("post1 text");
+        custom_posts_returned c6=new custom_posts_returned();
+        c6.setPost_owner_name("post1");
+        c6.setPost_text("post1 text");
+        custom_posts_returned c7=new custom_posts_returned();
+        c7.setPost_owner_name("post1");
+        c7.setPost_text("post1 text");
+        custom_posts_returned c8=new custom_posts_returned();
+        c8.setPost_owner_name("post1");
+        c8.setPost_text("post1 text");
+        custom_posts_returned c9=new custom_posts_returned();
+        c9.setPost_owner_name("post1");
+        c9.setPost_text("post1 text");
+        custom_posts_returned c10=new custom_posts_returned();
+        c10.setPost_owner_name("post1");
+        c10.setPost_text("post1 text");
+        HomePosts.add(c);
+        HomePosts.add(c2);
+        HomePosts.add(c3);
+        HomePosts.add(c1);
+        HomePosts.add(c4);
+        HomePosts.add(c5);
+        HomePosts.add(c6);
+        HomePosts.add(c7);
+        HomePosts.add(c8);
+        HomePosts.add(c9);
+        HomePosts.add(c10);
+        postadapter.notifyDataSetChanged();
 
-
-
+*/
 
     }
 
     @Override
     protected void onStart() {
-
+        AllHomePosts();
 
         if(mAuth.getCurrentUser()==null){
             main_login();
@@ -217,6 +263,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
   private void AllHomePosts(){
+      final ArrayList<custom_posts_returned> HomePosts=new ArrayList<custom_posts_returned>();
+      HomePosts.clear();
         if(mAuth.getCurrentUser()!=null){
             Post_listview=(ListView)findViewById(R.id.Post_listview);
             final PostAdapter postadapter=new PostAdapter(MainActivity.this,HomePosts);
@@ -234,16 +282,130 @@ public class MainActivity extends AppCompatActivity {
                                @Override
                                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                                    final Posts checkPost=dataSnapshot.getValue(Posts.class);
+                                   final String postkey=dataSnapshot.getKey();
                                    if(TextUtils.equals(checkPost.getUserId(),friend)&&TextUtils.equals(checkPost.getPlaceTypeId(),"1")){ //hena post text cheeeck empty
                                       // System.out.println("firends are "+friend);
                                        myRef.addChildEventListener(new ChildEventListener() {
                                            @Override
                                            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                                               final Users postuser=dataSnapshot.getValue(Users.class);
-                                               if(TextUtils.equals(postuser.getUserId(),checkPost.getUserId())){  // mn hena username
-                                                   if(postuser.getProfile_pic_id()!=null){  // mn hena hageb p.p
-
+                                               if(TextUtils.equals(postuser.getUserId(),checkPost.getUserId())){// mn hena username
+                                                  final custom_posts_returned custom=new custom_posts_returned();
+                                                   custom.setPost_owner_name(postuser.getUsername());
+                                                   custom.setPost_text(checkPost.getPostcontent());
+                                                   if(postuser.getProfile_pic_id()!=null&&checkPost.isHasimage()==true) {  //lw 3ando both
                                                        mStorageRef.child(postuser.getProfile_pic_id()).getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                                           @Override
+                                                           public void onSuccess(byte[] bytes) {
+                                                               final Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                                               DisplayMetrics dm = new DisplayMetrics();
+                                                               getWindowManager().getDefaultDisplay().getMetrics(dm);
+                                                               custom.setProfile_image(bm);
+                                                               mStorageRef2.child(checkPost.getImageId()).getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                                                   @Override
+                                                                   public void onSuccess(byte[] bytes) {
+                                                                       Bitmap bm2 = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                                                       DisplayMetrics dm2 = new DisplayMetrics();
+                                                                       getWindowManager().getDefaultDisplay().getMetrics(dm2);
+                                                                       custom.setPost_image(bm2);
+                                                                       if (checkPost.getPostcontent() != null) {
+                                                                           custom.setPost_text(checkPost.getPostcontent());
+                                                                       }
+
+                                                                       HomePosts.add(custom);
+                                                                       postadapter.notifyDataSetChanged();
+
+                                                                     /*  System.out.println("name is "+custom.getPost_owner_name());
+                                                                       System.out.println("profile image is "+custom.getProfile_image());
+                                                                       System.out.println("post image is "+custom.getPost_image());
+                                                                       System.out.println("post content is "+custom.getPost_text());
+                                                                             */
+                                                                       //  System.out.println("size is "+HomePosts.size());
+                                                                       // System.out.println("from both  is "+custom.getPost_owner_name());
+                                                                   }
+                                                               });
+
+                                                           }
+                                                       });
+
+                                                   }
+                                                   else if(postuser.getProfile_pic_id()!=null&&checkPost.isHasimage()==false){ //lw 3ando profile w m3ndosh post image
+                                                       mStorageRef.child(postuser.getProfile_pic_id()).getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                                           @Override
+                                                           public void onSuccess(byte[] bytes) {
+                                                               final Bitmap bm = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                                               DisplayMetrics dm = new DisplayMetrics();
+                                                               getWindowManager().getDefaultDisplay().getMetrics(dm);
+                                                               custom.setProfile_image(bm);
+                                                               if (checkPost.getPostcontent() != null) {
+                                                                   custom.setPost_text(checkPost.getPostcontent());
+                                                               }
+
+                                                               HomePosts.add(custom);
+                                                               postadapter.notifyDataSetChanged();
+
+                                                              /* System.out.println("name is "+custom.getPost_owner_name());
+                                                               System.out.println("profile image is "+custom.getProfile_image());
+                                                               System.out.println("post image is "+custom.getPost_image());
+                                                               System.out.println("post content is "+custom.getPost_text());
+                                                             */
+                                                               // System.out.println("size is "+HomePosts.size());
+                                                               // System.out.println("from profile only  is "+custom.getPost_owner_name());
+
+                                                           }
+                                                       });
+
+
+                                                   }
+                                                   else if(postuser.getProfile_pic_id()==null&&checkPost.isHasimage()==true){ //lw 3ando post image w mfesh profile
+                                                       mStorageRef2.child(checkPost.getImageId()).getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                                           @Override
+                                                           public void onSuccess(byte[] bytes) {
+                                                               Bitmap bm2 = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                                               DisplayMetrics dm2 = new DisplayMetrics();
+                                                               getWindowManager().getDefaultDisplay().getMetrics(dm2);
+                                                               custom.setPost_image(bm2);
+                                                               if (checkPost.getPostcontent() != null) {
+                                                                   custom.setPost_text(checkPost.getPostcontent());
+                                                               }
+
+                                                               HomePosts.add(custom);
+                                                               postadapter.notifyDataSetChanged();
+
+                                                               /*System.out.println("name is "+custom.getPost_owner_name());
+                                                               System.out.println("profile image is "+custom.getProfile_image());
+                                                               System.out.println("post image is "+custom.getPost_image());
+                                                               System.out.println("post content is "+custom.getPost_text()); */
+
+                                                               //System.out.println("size is "+HomePosts.size());
+                                                               //System.out.println("post img only is "+custom.getPost_owner_name());
+
+                                                           }
+                                                       });
+
+
+                                                   }
+                                                   else{
+                                                       if (checkPost.getPostcontent() != null) {
+                                                           custom.setPost_text(checkPost.getPostcontent());
+                                                       }
+
+                                                       HomePosts.add(custom);
+                                                       postadapter.notifyDataSetChanged();
+
+
+                                                      /* System.out.println("name is "+custom.getPost_owner_name());
+                                                       System.out.println("profile image is "+custom.getProfile_image());
+                                                       System.out.println("post image is "+custom.getPost_image());
+                                                       System.out.println("post content is "+custom.getPost_text());*/
+                                                       //System.out.println("size is "+HomePosts.size());
+                                                       //System.out.println("neither is "+custom.getPost_owner_name());
+
+
+                                                   }
+
+
+             /* mStorageRef.child(postuser.getProfile_pic_id()).getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                                                            @Override
                                                            public void onSuccess(byte[] bytes) {
 
@@ -288,9 +450,9 @@ public class MainActivity extends AppCompatActivity {
                                                            }
                                                        });
 
+                                                    */
 
-                                                   }
-                                                       else if(checkPost.isHasimage()==true){
+                                                      /* else if(checkPost.isHasimage()==true){
                                                        mStorageRef2.child(checkPost.getImageId()).getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                                                            @Override
                                                            public void onSuccess(byte[] bytes) {
@@ -322,7 +484,7 @@ public class MainActivity extends AppCompatActivity {
                                                        postadapter.notifyDataSetChanged();
                                                    }
 
-
+                                                        */
 
 
 

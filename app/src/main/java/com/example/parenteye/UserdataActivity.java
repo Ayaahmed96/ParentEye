@@ -73,6 +73,8 @@ public class UserdataActivity extends AppCompatActivity {
     private String imagekey;
     private TextView logout;
     //private TextView test;          //for test
+    private  ProgressDialog progressdialogue;
+
 
 
 
@@ -149,7 +151,7 @@ public class UserdataActivity extends AppCompatActivity {
        submit.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
-
+               showDialogue();
                String name=username.getText().toString();
                String useraddresse=addresse.getText().toString();
                if(!TextUtils.isEmpty(name)&&!TextUtils.isEmpty(useraddresse)&&filldate!=0){
@@ -174,18 +176,19 @@ public class UserdataActivity extends AppCompatActivity {
                    }
                    */
                        upload_profile_pic();
-                       //mAuth.getCurrentUser().getUid()
-                                                    //kan hena newdate
+
+
      Users newuser=new Users(mAuth.getCurrentUser().getUid(),name,newdate,useraddresse,isMale,"1",true,imagekey);
                        myRef.push().setValue(newuser).addOnCompleteListener(new OnCompleteListener<Void>() {
                            @Override
                            public void onComplete(@NonNull Task<Void> task) {
                                if(task.isSuccessful()){
-
+                                   dismissProgressDialog();
                                    Toast.makeText(UserdataActivity.this,"Profile Information completed Successfully",Toast.LENGTH_LONG).show();
                                    Go_to_main();
                                }
                                else{
+                                   dismissProgressDialog();
                                    Toast.makeText(UserdataActivity.this,"Error !!!  "+task.getException(),Toast.LENGTH_LONG).show();
 
                                }
@@ -247,9 +250,10 @@ public class UserdataActivity extends AppCompatActivity {
 
     private void upload_profile_pic(){
         if(filepath!=null){
-            final ProgressDialog progressdialogue=new ProgressDialog(this);
-            progressdialogue.setTitle("loading...");
-            progressdialogue.show();
+           // final ProgressDialog progressdialogue=new ProgressDialog(this);
+          //  progressdialogue.setTitle("loading...");
+          //  progressdialogue.show();
+
             imagekey = UUID.randomUUID().toString();
             StorageReference ref = mStorageRef.child("images/"+imagekey);
             ref.putFile(filepath)
@@ -257,13 +261,15 @@ public class UserdataActivity extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            progressdialogue.dismiss();
+                           // progressdialogue.dismiss();
+                            dismissProgressDialog();
                         }
                     })
             .addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    progressdialogue.dismiss();
+                    //progressdialogue.dismiss();
+                    dismissProgressDialog();
             Toast.makeText(UserdataActivity.this,"Profile Photo uploading error",Toast.LENGTH_LONG).show();
                 }
             });
@@ -273,6 +279,25 @@ public class UserdataActivity extends AppCompatActivity {
         Intent goMain=new Intent(UserdataActivity.this,MainActivity.class);
         startActivity(goMain);
         finish();
+    }
+    private void showDialogue(){
+        if(progressdialogue==null){
+            progressdialogue=new ProgressDialog(this);
+            progressdialogue.setTitle("loading...");
+            progressdialogue.setMessage("please wait...");
+
+        }
+        progressdialogue.show();
+    }
+    private void dismissProgressDialog() {
+        if (progressdialogue != null && progressdialogue.isShowing()) {
+            progressdialogue.dismiss();
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        dismissProgressDialog();
+        super.onDestroy();
     }
 
 }
