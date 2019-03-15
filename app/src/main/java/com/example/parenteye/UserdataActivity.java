@@ -178,8 +178,8 @@ public class UserdataActivity extends AppCompatActivity {
                        upload_profile_pic();
 
 
-     Users newuser=new Users(mAuth.getCurrentUser().getUid(),name,newdate,useraddresse,isMale,"1",true,imagekey);
-                       myRef.push().setValue(newuser).addOnCompleteListener(new OnCompleteListener<Void>() {
+     Users newuser=new Users(name,newdate,useraddresse,isMale,"1",true,imagekey);
+                       myRef.child(mAuth.getCurrentUser().getUid()).setValue(newuser).addOnCompleteListener(new OnCompleteListener<Void>() {
                            @Override
                            public void onComplete(@NonNull Task<Void> task) {
                                if(task.isSuccessful()){
@@ -196,6 +196,7 @@ public class UserdataActivity extends AppCompatActivity {
                        });
                    }
                      else{
+                       dismissProgressDialog();
         Toast.makeText(UserdataActivity.this,"Sorry,your age should not less than 20 years!!",Toast.LENGTH_LONG).show();
 
                    }
@@ -207,6 +208,7 @@ public class UserdataActivity extends AppCompatActivity {
 
 
                  else{
+                   dismissProgressDialog();
                    Toast.makeText(UserdataActivity.this,"Fill all fields please ,they are all mandatory !!",Toast.LENGTH_LONG).show();
 
                }
@@ -241,11 +243,14 @@ public class UserdataActivity extends AppCompatActivity {
             try{
                 Bitmap bitmap= MediaStore.Images.Media.getBitmap(getContentResolver(),filepath);
                 circleimage.setImageBitmap(bitmap);
+
             }
             catch (IOException e){
                 e.printStackTrace();
+
             }
         }
+
     }
 
     private void upload_profile_pic(){
@@ -255,7 +260,7 @@ public class UserdataActivity extends AppCompatActivity {
           //  progressdialogue.show();
 
             imagekey = UUID.randomUUID().toString();
-            StorageReference ref = mStorageRef.child("images/"+imagekey);
+            StorageReference ref = mStorageRef.child("UserImages/"+imagekey);
             ref.putFile(filepath)
 
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {

@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> friendspostskeys=new ArrayList<String>();
     private ArrayList<Posts> Postss=new ArrayList<Posts>();
     final long ONE_MEGABYTE = 1024 * 1024;
+    private Button makePage;
 
 
 
@@ -59,13 +60,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mAuth = FirebaseAuth.getInstance();
-        mStorageRef = FirebaseStorage.getInstance().getReference("images/");
+        mStorageRef = FirebaseStorage.getInstance().getReference("UserImages/");
         mStorageRef2 = FirebaseStorage.getInstance().getReference("PostsImages/");
 
 
 
 
-
+        makePage=(Button) findViewById(R.id.makepage);
         logout=(Button) findViewById(R.id.logout);
         logout.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -77,7 +78,14 @@ public class MainActivity extends AppCompatActivity {
                }
            }
        });
-
+        makePage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+         Intent makepage=new Intent(MainActivity.this,AddPageActivity.class);
+         startActivity(makepage);
+         //finish();
+            }
+        });
 
 /*
         Friends friend=new Friends();
@@ -240,7 +248,8 @@ c.setPost_text("post1 text");
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot UsersSnapshot: dataSnapshot.getChildren()) {
                      Users user=UsersSnapshot.getValue(Users.class);
-                     if(TextUtils.equals(user.getUserId(),mAuth.getCurrentUser().getUid())){
+                     String key=UsersSnapshot.getKey();
+                     if(TextUtils.equals(key,mAuth.getCurrentUser().getUid())){
                          userCompleteProfile=1;
                     }
 
@@ -289,7 +298,8 @@ c.setPost_text("post1 text");
                                            @Override
                                            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                                               final Users postuser=dataSnapshot.getValue(Users.class);
-                                               if(TextUtils.equals(postuser.getUserId(),checkPost.getUserId())){// mn hena username
+                                              String key=dataSnapshot.getKey();
+                                               if(TextUtils.equals(key,checkPost.getUserId())){// mn hena username
                                                   final custom_posts_returned custom=new custom_posts_returned();
                                                    custom.setPost_owner_name(postuser.getUsername());
                                                    custom.setPost_text(checkPost.getPostcontent());

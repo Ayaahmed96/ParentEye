@@ -17,6 +17,11 @@
             android:layout_height="wrap_content"
             android:id="@+id/logout"
             android:text="logout"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/makepage"
+            android:text="create page"/>
 
         <ListView
             android:id="@+id/Post_listview"

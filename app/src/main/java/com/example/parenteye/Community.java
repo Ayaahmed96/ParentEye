@@ -1,44 +1,56 @@
 package com.example.parenteye;
 
+
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Community {
     private String CommunityId;
+    private String Communityname;
+    private String CommunityAbout;
     private String typeid;  //1 if group and 2 if page
-    private Date createdDate;
+    private LocalDate createdDate;
     private String coverPhotoId;
     private String PhotoId;
     private String AdminId;
-    private String typeId;
+
+
 
 
 
     public Community(){
 
     }
-    public Community(String communityId,String typeid, Date createdDate, String coverPhotoId, String photoId, String adminId, String typeId) {
+
+    public Community(String communityId, String communityname, String communityAbout, String typeid, LocalDate createdDate, String coverPhotoId, String photoId, String adminId) {
         CommunityId = communityId;
+        Communityname = communityname;
+        CommunityAbout = communityAbout;
+        this.typeid = typeid;
         this.createdDate = createdDate;
         this.coverPhotoId = coverPhotoId;
-        this.typeid=typeId;
         PhotoId = photoId;
         AdminId = adminId;
-        this.typeId = typeId;
-    }
 
-    public void setTypeid(String typeid) {
-        this.typeid = typeid;
-    }
-
-    public String getTypeid() {
-        return typeid;
     }
 
     public void setCommunityId(String communityId) {
         CommunityId = communityId;
     }
 
-    public void setCreatedDate(Date createdDate) {
+    public void setCommunityname(String communityname) {
+        Communityname = communityname;
+    }
+
+    public void setCommunityAbout(String communityAbout) {
+        CommunityAbout = communityAbout;
+    }
+
+    public void setTypeid(String typeid) {
+        this.typeid = typeid;
+    }
+
+    public void setCreatedDate(LocalDate createdDate) {
         this.createdDate = createdDate;
     }
 
@@ -54,15 +66,26 @@ public class Community {
         AdminId = adminId;
     }
 
-    public void setTypeId(String typeId) {
-        this.typeId = typeId;
-    }
+
+
 
     public String getCommunityId() {
         return CommunityId;
     }
 
-    public Date getCreatedDate() {
+    public String getCommunityname() {
+        return Communityname;
+    }
+
+    public String getCommunityAbout() {
+        return CommunityAbout;
+    }
+
+    public String getTypeid() {
+        return typeid;
+    }
+
+    public LocalDate getCreatedDate() {
         return createdDate;
     }
 
@@ -78,7 +101,5 @@ public class Community {
         return AdminId;
     }
 
-    public String getTypeId() {
-        return typeId;
-    }
+
 }

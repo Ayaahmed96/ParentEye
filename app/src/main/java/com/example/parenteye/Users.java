@@ -16,9 +16,8 @@ public class Users {
     private String cover_pic_id;
 
 
-    public Users(String userId, String username,Date dateofbirth, String location, boolean gender, String roleId, boolean activeStatus, String profile_pic_id) {
+    public Users(String username,Date dateofbirth, String location, boolean gender, String roleId, boolean activeStatus, String profile_pic_id) {
 
-        this.userId = userId;
         Username = username;
       //  this.dateofbirth = dateofbirth;
         this.location = location;
