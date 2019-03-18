@@ -23,6 +23,23 @@
             android:id="@+id/makepage"
             android:text="create page"/>
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/goprofile"
+            android:text="Go profile"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/goGroup"
+            android:text="Go Group"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/makeGroup"
+            android:text="Create Group"/>
+
         <ListView
             android:id="@+id/Post_listview"
             android:layout_width="match_parent"

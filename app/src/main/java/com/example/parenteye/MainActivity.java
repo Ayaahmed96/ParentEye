@@ -52,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Posts> Postss=new ArrayList<Posts>();
     final long ONE_MEGABYTE = 1024 * 1024;
     private Button makePage;
+    private Button goprofile;
+    private Button goGroup;
+    private Button makeGroup;  //eman
 
 
 
@@ -63,11 +66,29 @@ public class MainActivity extends AppCompatActivity {
         mStorageRef = FirebaseStorage.getInstance().getReference("UserImages/");
         mStorageRef2 = FirebaseStorage.getInstance().getReference("PostsImages/");
 
-
+        makeGroup=(Button) findViewById(R.id.makeGroup); //eman
 
 
         makePage=(Button) findViewById(R.id.makepage);
         logout=(Button) findViewById(R.id.logout);
+        goprofile=(Button)findViewById(R.id.goprofile);
+        goGroup=(Button) findViewById(R.id.goGroup);
+
+
+
+
+
+        //eman
+        makeGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent makegroup=new Intent(MainActivity.this,MakeGroupActivity.class);
+                startActivity(makegroup);
+            }
+        });
+//l7ad hena
+
+
         logout.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
@@ -78,6 +99,22 @@ public class MainActivity extends AppCompatActivity {
                }
            }
        });
+
+
+        goprofile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GoAccount();
+            }
+        });
+        goGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GoAccount();
+            }
+        });
+
+
         makePage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,17 +134,22 @@ public class MainActivity extends AppCompatActivity {
 
 
      // 1 sora 3and aya, 1 aya fady, ahmed fady,ayman sora
-     /*   Posts post1=new Posts();
-        post1.setUserId("w0hp6UeWq5Ul9Zt3rw5V6hoXvFA3");
-        post1.setPlaceTypeId("1");
-        post1.setPostcontent("This post is done by aya in her timeline");
-        post1.setHasimage(true);
-        post1.setImageId("");
+         /*
+       Posts post1=new Posts();
+        post1.setUserId("BHgoh3PIT6R33lknkJPYswV0A3C2");
+        post1.setPlaceTypeId("3");
+        post1.setPlaceId("-La0sXFPy2dXzxX-Xws6");
+        post1.setPostcontent("This post is done by aya in Group");
+        post1.setHasimage(false);
         Posts post2=new Posts();
-        post2.setUserId("w0hp6UeWq5Ul9Zt3rw5V6hoXvFA3");
-        post2.setPlaceTypeId("1");
+        post2.setUserId("obCSBP1RgkOln93OQ7ub51XTdJF2");
+        post2.setPlaceTypeId("3");
+        post2.setPlaceId("-La0sXFPy2dXzxX-Xws6");
+        post2.setPostcontent("This post is done by eman in Group");
         post2.setHasimage(false);
-        post2.setPostcontent("This post is done by aya in her timeline too");
+        myRef2.push().setValue(post1);
+        myRef2.push().setValue(post2);
+
         Posts post3=new Posts();
         post3.setUserId("w0hp6UeWq5Ul9Zt3rw5V6hoXvFA3");
         post3.setPlaceTypeId("3");
@@ -157,8 +199,8 @@ public class MainActivity extends AppCompatActivity {
         myRef2.push().setValue(post8);
         myRef2.push().setValue(post9);
 
-
 */
+
 
     /*   ArrayList<custom_posts_returned> HomePosts=new ArrayList<custom_posts_returned>();
         Post_listview=(ListView)findViewById(R.id.Post_listview);
@@ -216,7 +258,7 @@ c.setPost_text("post1 text");
 
     @Override
     protected void onStart() {
-        AllHomePosts();
+       //AllHomePosts();
 
         if(mAuth.getCurrentUser()==null){
             main_login();
@@ -228,7 +270,11 @@ c.setPost_text("post1 text");
         super.onStart();
     }
 
-
+      private void GoAccount(){
+          Intent goAccount=new Intent(MainActivity.this,AccountActivity.class);
+          startActivity(goAccount);
+          finish();
+            }
     private void main_signup(){
         Intent main_signup=new Intent(MainActivity.this,SignupActivity.class);
         startActivity(main_signup);
